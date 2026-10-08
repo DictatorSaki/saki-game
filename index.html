@@ -3,44 +3,68 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Saki Game — Tic Tac Toe</title>
+  <title>Saki Game Box</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
   <script src="app.js" defer></script>
 </head>
 <body>
   <main class="game">
-    <div class="heading-row"><div><p class="small-title">A LITTLE GAME, TOGETHER</p><h1>Saki Game</h1></div><span class="theme-mark" aria-hidden="true">✳</span></div>
-    <p class="instructions">A tiny game for a little friendly rivalry.</p>
+    <div class="heading-row"><div><p class="small-title">YOUR LITTLE ARCADE</p><h1>Saki Game Box</h1></div><span class="theme-mark" aria-hidden="true">✳</span></div>
+    <p class="instructions">Pick a game and invite a friend to play.</p>
 
-    <section class="lobby" id="lobby" aria-label="Start an online game">
-      <label class="field-label" for="nickname">YOUR NICKNAME</label>
-      <input class="text-field" id="nickname" maxlength="18" placeholder="e.g. Alex" autocomplete="nickname">
-      <button class="primary-button" id="createRoom" type="button">Create a game room <span>↗</span></button>
-      <div class="divider"><span>OR JOIN A FRIEND</span></div>
-      <label class="field-label" for="roomCode">ROOM CODE</label>
-      <div class="join-row"><input class="text-field" id="roomCode" placeholder="Paste your friend's code" autocomplete="off"><button class="join-button" id="joinRoom" type="button">Join</button></div>
-      <p class="connection-note" id="connectionNote" aria-live="polite">Both players need to open this website online.</p>
+    <section class="game-hub" id="gameHub" aria-label="Choose a game">
+      <p class="field-label">CHOOSE A GAME</p>
+      <button class="game-tile" id="playTicTacToe" type="button">
+        <span class="tile-icon" aria-hidden="true">X<span>O</span></span>
+        <span class="tile-copy"><strong>Tic-Tac-Toe</strong><small>Play online with a friend</small></span>
+        <span class="tile-arrow" aria-hidden="true">↗</span>
+      </button>
+      <div class="coming-soon"><span aria-hidden="true">＋</span><span><strong>More games</strong><small>Coming soon</small></span></div>
     </section>
 
-    <section class="play-area hidden" id="playArea" aria-label="Online Tic Tac Toe game">
-      <div class="room-bar"><span class="connection-dot" id="connectionDot"></span><span id="roomStatus">Waiting for your friend</span><button class="copy-button" id="copyInvite" type="button">Copy invite link</button></div>
-      <div class="players"><div class="player-card active-player" id="xPlayer"><span class="player-mark x-mark">X</span><span class="player-name" id="xName">You</span><small>GAME MASTER</small></div><span class="versus">VS</span><div class="player-card" id="oPlayer"><span class="player-mark o-mark">O</span><span class="player-name" id="oName">Friend</span><small>GUEST</small></div></div>
-      <p class="status" id="status" aria-live="polite">Waiting for your friend…</p>
-      <div class="board" id="board" aria-label="Tic Tac Toe board">
-      <button class="square" type="button" aria-label="Top left"></button>
-      <button class="square" type="button" aria-label="Top middle"></button>
-      <button class="square" type="button" aria-label="Top right"></button>
-      <button class="square" type="button" aria-label="Middle left"></button>
-      <button class="square" type="button" aria-label="Center"></button>
-      <button class="square" type="button" aria-label="Middle right"></button>
-      <button class="square" type="button" aria-label="Bottom left"></button>
-      <button class="square" type="button" aria-label="Bottom middle"></button>
-      <button class="square" type="button" aria-label="Bottom right"></button>
-      </div>
-      <button class="new-game" id="newGame" type="button" disabled>Play again</button>
-      <button class="leave-button" id="leaveGame" type="button">Leave this game</button>
+    <section class="game-screen hidden" id="gameScreen" aria-label="Tic-Tac-Toe game">
+      <button class="back-link" id="backToGames" type="button">← All games</button>
+      <section class="lobby" id="lobby" aria-label="Start an online game">
+        <label class="field-label" for="nickname">YOUR NICKNAME</label>
+        <input class="text-field" id="nickname" maxlength="18" placeholder="e.g. Alex" autocomplete="nickname">
+        <button class="primary-button" id="createRoom" type="button">Create a game room <span>↗</span></button>
+        <div class="divider"><span>OR JOIN A FRIEND</span></div>
+        <label class="field-label" for="roomCode">ROOM CODE</label>
+        <div class="join-row"><input class="text-field" id="roomCode" placeholder="Paste your friend's code" autocomplete="off"><button class="join-button" id="joinRoom" type="button">Join</button></div>
+        <p class="connection-note" id="connectionNote" aria-live="polite">Both players need to open this website online.</p>
+      </section>
+
+      <section class="play-area hidden" id="playArea" aria-label="Online Tic Tac Toe game">
+        <div class="room-bar"><span class="connection-dot" id="connectionDot"></span><span id="roomStatus">Waiting for your friend</span><button class="copy-button" id="copyInvite" type="button">Copy invite link</button></div>
+        <div class="players"><div class="player-card active-player" id="xPlayer"><span class="player-mark x-mark">X</span><span class="player-name" id="xName">You</span><small>GAME MASTER</small></div><span class="versus">VS</span><div class="player-card" id="oPlayer"><span class="player-mark o-mark">O</span><span class="player-name" id="oName">Friend</span><small>GUEST</small></div></div>
+        <p class="status" id="status" aria-live="polite">Waiting for your friend…</p>
+        <div class="board" id="board" aria-label="Tic Tac Toe board">
+          <button class="square" type="button" aria-label="Top left"></button>
+          <button class="square" type="button" aria-label="Top middle"></button>
+          <button class="square" type="button" aria-label="Top right"></button>
+          <button class="square" type="button" aria-label="Middle left"></button>
+          <button class="square" type="button" aria-label="Center"></button>
+          <button class="square" type="button" aria-label="Middle right"></button>
+          <button class="square" type="button" aria-label="Bottom left"></button>
+          <button class="square" type="button" aria-label="Bottom middle"></button>
+          <button class="square" type="button" aria-label="Bottom right"></button>
+        </div>
+        <button class="new-game" id="newGame" type="button" disabled>Play again</button>
+        <button class="leave-button" id="leaveGame" type="button">Leave this game</button>
+      </section>
     </section>
+
+    <dialog class="nickname-dialog" id="nicknameDialog" aria-labelledby="nicknameTitle">
+      <span class="dialog-mark" aria-hidden="true">✳</span>
+      <p class="small-title">JOIN A FRIEND</p>
+      <h2 id="nicknameTitle">Choose your nickname</h2>
+      <p class="dialog-copy">Your friend is waiting in the room.</p>
+      <label class="field-label" for="inviteNickname">YOUR NICKNAME</label>
+      <input class="text-field" id="inviteNickname" maxlength="18" placeholder="e.g. Alex" autocomplete="nickname">
+      <button class="primary-button" id="confirmJoin" type="button">Join the room <span>↗</span></button>
+      <button class="leave-button" id="cancelInvite" type="button">Cancel</button>
+    </dialog>
     <p class="footer">TWO PLAYERS <span>·</span> ONE LITTLE BOARD <span>·</span> GOOD LUCK</p>
   </main>
 </body>
