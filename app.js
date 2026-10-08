@@ -168,7 +168,7 @@ document.querySelector('#createRoom').addEventListener('click', function () {
     return;
   }
 
-  peer = new Peer();
+  peer = new Peer(undefined, { config: { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' }, { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' }, { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' } ] } });
   peer.on('open', function (id) {
     beginGameScreen();
     roomStatus.textContent = 'Room is ready — invite your friend';
@@ -199,7 +199,7 @@ document.querySelector('#joinRoom').addEventListener('click', function () {
     return;
   }
 
-  peer = new Peer();
+  peer = new Peer(undefined, { config: { iceServers: [ { urls: 'stun:stun.l.google.com:19302' }, { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' }, { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' }, { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' } ] } });
   peer.on('open', function () {
     connection = peer.connect(peerId, { reliable: true });
     beginGameScreen();
