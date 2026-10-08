@@ -290,3 +290,43 @@ document.querySelector('#leaveGame').addEventListener('click', function () {
   if (peer) peer.destroy();
   window.location.assign(window.location.pathname);
 });
+
+
+// The home screen can grow into a collection of games. Tic-Tac-Toe is the first one.
+const gameHub = document.querySelector('#gameHub');
+const gameScreen = document.querySelector('#gameScreen');
+const nicknameDialog = document.querySelector('#nicknameDialog');
+const inviteNicknameInput = document.querySelector('#inviteNickname');
+
+document.querySelector('#playTicTacToe').addEventListener('click', function () {
+  gameHub.classList.add('hidden');
+  gameScreen.classList.remove('hidden');
+});
+
+document.querySelector('#backToGames').addEventListener('click', function () {
+  if (peer) peer.destroy();
+  window.location.assign(window.location.pathname);
+});
+
+document.querySelector('#confirmJoin').addEventListener('click', function () {
+  const chosenName = inviteNicknameInput.value.trim();
+  if (!chosenName) {
+    inviteNicknameInput.focus();
+    return;
+  }
+  nicknameInput.value = chosenName;
+  nicknameDialog.close();
+  document.querySelector('#joinRoom').click();
+});
+
+document.querySelector('#cancelInvite').addEventListener('click', function () {
+  nicknameDialog.close();
+  window.location.assign(window.location.pathname);
+});
+
+if (invitedRoom) {
+  gameHub.classList.add('hidden');
+  gameScreen.classList.remove('hidden');
+  nicknameDialog.showModal();
+  inviteNicknameInput.focus();
+}
