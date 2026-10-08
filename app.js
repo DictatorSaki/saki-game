@@ -24,9 +24,9 @@ let myMark = '';
 let myName = '';
 let hostName = '';
 let guestName = '';
-let board = Array(9).fill('');
-let currentPlayer = 'X';
+let board = Array(9).fill('');let currentPlayer = 'X';
 let gameIsOver = false;
+let scores = { X: 0, O: 0, draws: 0 };
 
 // If a friend sent a room link, put its room code in the join box for them.
 const invitedRoom = new URLSearchParams(window.location.search).get('room');
@@ -46,9 +46,8 @@ function beginGameScreen() {
   xNameText.textContent = hostName || 'Game master';
   oNameText.textContent = guestName || 'Waiting…';
   drawBoard();
-}
-
-function updateTurnText() {
+}function updateTurnText() {
+  updateScoreboard();
   document.querySelector('#xPlayer').classList.toggle('active-player', !gameIsOver && currentPlayer === 'X');
   document.querySelector('#oPlayer').classList.toggle('active-player', !gameIsOver && currentPlayer === 'O');
   squares.forEach(function (square, index) {
@@ -67,6 +66,12 @@ function updateTurnText() {
     statusText.textContent = currentPlayer === myMark ? 'Your turn — make a move!' : (currentPlayer === 'X' ? hostName : guestName) + ' is thinking…';
     newGameButton.disabled = true;
   }
+}function updateScoreboard() {
+  document.querySelector('#xScore').textContent = scores.X;
+  document.querySelector('#oScore').textContent = scores.O;
+  document.querySelector('#drawScore').textContent = scores.draws;
+  document.querySelector('#xScoreName').textContent = hostName || 'Game master';
+  document.querySelector('#oScoreName').textContent = guestName || 'Friend';
 }
 
 function drawBoard() {
@@ -330,3 +335,48 @@ if (invitedRoom) {
   nicknameDialog.showModal();
   inviteNicknameInput.focus();
 }
+
+
+// Keep room scores on the host and share them with the guest.
+const originalMakeStateMessage = makeStateMessage;
+makeStateMessage = function () {
+  const message = originalMakeStateMessage();
+  message.scores = scores;
+  return message;
+};
+
+const originalMakeMove = makeMove;
+makeMove = function (index, mark) {
+  const wasOver = gameIsOver;
+  originalMakeMove(index, mark);
+  if (!wasOver && gameIsOver) {
+    const line = winningLines.find(function (spots) {
+      return board[spots[0]] && spots.every(function (spot) { return board[spot] === board[spots[0]]; });
+    });
+    if (line) scores[board[line[0]]] += 1;
+    else scores.draws += 1;
+    updateScoreboard();
+    sendState();
+  }
+};
+
+function receiveRoomScores(message) {
+  if (!message || message.type !== 'state' || !message.scores) return;
+  scores = message.scores;
+  hostName = message.hostName || hostName;
+  guestName = message.guestName || guestName;
+  updateScoreboard();
+}
+
+const originalReceiveConnection = receiveConnection;
+receiveConnection = function (newConnection) {
+  originalReceiveConnection(newConnection);
+  newConnection.on('data', receiveRoomScores);
+};
+
+const originalPeerConnect = Peer.prototype.connect;
+Peer.prototype.connect = function () {
+  const newConnection = originalPeerConnect.apply(this, arguments);
+  newConnection.on('data', receiveRoomScores);
+  return newConnection;
+};
